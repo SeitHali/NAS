@@ -5,12 +5,12 @@ services:
     hostname: samba
     image: sixeyed/samba
     volumes:
-      - /dev/md0:/mnt/media
-      - /home/roman:/mnt/nas
+      - /mnt/md0:/mnt/media
+      - /home/roman:/mnt/server
     ports:
       - "139:139"
       - "445:445"
       - "137:137/udp"
       - "138:138/udp"
-    command: samba.sh -s "media;/mnt/media;yes;no;yes;all" -s "nas;/mnt/nas;yes;no;yes;all"
+    command: samba.sh -s "media;/mnt/media;yes;no;yes;all" -s "server;/mnt/server;yes;no;yes;all"
     restart: always
