@@ -10,5 +10,6 @@
 # /boot/efi was on /dev/sdc1 during curtin installation
 /dev/disk/by-uuid/98A6-3FE5 /boot/efi vfat defaults 0 0
 /swap.img	none	swap	sw	0	0
-/dev/md0 /home/roman/nas ext4 
+/dev/md0 /home/roman/nas ext4
 UUID=079ED73D0BD0F07F /home/roman/media ntfs-3g rw,uid=1000,gid=1000 0 0
+UUID=19002064-7dd3-47db-8ec2-2f31771ecb4f /home/roman/setup ext4
