@@ -20,8 +20,8 @@ services:
       - PGID=1000
       - TZ=Europe/London
       - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      - USER=username #optional
-      - PASS=password #optional
+      - USER=transmission #optional
+      - PASS=4f92c19d05 #optional
     volumes:
       - /home/roman/transmission/config:/config
       - /home/roman/media/TORRENT:/downloads
