@@ -12,7 +12,6 @@ services:
       - "445:445"
     command: samba.sh -s "nas;/mnt/nas;yes;no;yes;all" -s "media;/mnt/media;yes;no;yes;all" -p
     restart: always
-services:
   transmission:
     image: linuxserver/transmission
     container_name: transmission
