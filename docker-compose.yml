@@ -24,11 +24,26 @@ services:
       - USER=transmission #optional
       - PASS=4f92c19d05 #optional
     volumes:
-      - /home/roman/transmission/config:/config
+      - /home/roman/setup/transmission/config:/config
       - /home/roman/media/TORRENT:/downloads
-      - /home/roman/transmission/watch:/watch
+      - /home/roman/setup/transmission/watch:/watch
     ports:
       - 9091:9091
       - 51413:51413
       - 51413:51413/udp
+    restart: unless-stopped
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - UMASK_SET=022 #optional
+      - PLEX_CLAIM= #optional
+    volumes:
+      - /home/roman/setup/plex:/config
+      - /home/roman/media/SERIALS:/tv
+      - /home/roman/media/MOVIES:/movies
     restart: unless-stopped
