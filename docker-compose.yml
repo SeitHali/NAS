@@ -7,10 +7,11 @@ services:
     volumes:
       - /home/roman/nas:/mnt/nas
       - /home/roman/media:/mnt/media
+      - /home/roman/setup:/mnt/setup
     ports:
       - "139:139"
       - "445:445"
-    command: samba.sh -s "nas;/mnt/nas;yes;no;yes;all" -s "media;/mnt/media;yes;no;yes;all" -p
+    command: samba.sh -s "nas;/mnt/nas;yes;no;yes;all" -s "media;/mnt/media;yes;no;yes;all" -s "setup;/mnt/setup;yes;no;yes;all" -p
     restart: always
   transmission:
     image: linuxserver/transmission
