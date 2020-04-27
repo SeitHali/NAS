@@ -46,6 +46,7 @@ services:
       - /home/roman/setup/plex:/config
       - /home/roman/media/SERIALS:/tv
       - /home/roman/media/MOVIES:/movies
+      - /home/roman/setup/plex/transcode:/transcode
     ports:
       - 32400:32400
       - 32400:32400/udp
