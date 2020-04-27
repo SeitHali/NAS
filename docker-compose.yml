@@ -65,3 +65,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/roman/setup/portainer:/data
+  ftp:
+    image: fauria/vsftpd
+    command: -e FTP_USER=myuser -e FTP_PASS=mypass -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110
+    volumes:
+      /home/roman/nas:/home/vsftpd
+    ports:
+      - 20:20
+      - 21:21
+      - 21100-21110:21100-21110
+    restart: always
