@@ -71,5 +71,8 @@ services:
       - /home/roman/setup/ftp/ftpuser:/home/ftpuser
       - /home/roman/setup/ftp/pure-ftpd:/etc/pure-ftpd
     privileged: true
-    network: host
+    ports:
+      - 20:20
+      - 21:21
+      - 21100-21110:21100-21110
     restart: always
