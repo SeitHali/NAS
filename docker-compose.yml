@@ -65,13 +65,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/roman/setup/portainer:/data
-  ftp:
-    image: fauria/vsftpd
-    command: -e FTP_USER=myuser -e FTP_PASS=mypass -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110
+  pure-ftpd:
+    image: vimagick/pure-ftpd
     volumes:
-      /home/roman/nas:/home/vsftpd
-    ports:
-      - 20:20
-      - 21:21
-      - 21100-21110:21100-21110
+      - /home/roman/setup/ftp/ftpuser:/home/ftpuser
+      - /home/roman/setup/ftp/pure-ftpd:/etc/pure-ftpd
+    privileged: true
+    network: host
     restart: always
