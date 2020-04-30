@@ -67,16 +67,9 @@ services:
       - /home/roman/setup/portainer:/data
   pure-ftpd:
     image: vimagick/pure-ftpd
-<<<<<<< HEAD
-=======
-    net: host
->>>>>>> e77ce819d5c5e111722baaf538366b94aab44a4d
     volumes:
       - /home/roman/setup/ftp/ftpuser:/home/ftpuser
       - /home/roman/setup/ftp/pure-ftpd:/etc/pure-ftpd
     privileged: true
-<<<<<<< HEAD
     network: host
-=======
->>>>>>> e77ce819d5c5e111722baaf538366b94aab44a4d
     restart: always
