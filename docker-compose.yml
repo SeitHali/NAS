@@ -11,7 +11,7 @@ services:
     ports:
       - "139:139"
       - "445:445"
-    command: samba.sh -s "nas;/mnt/nas;yes;no;yes;all" -s "media;/mnt/media;yes;no;yes;all" -s "setup;/mnt/setup;yes;no;yes;all" 
+    command: samba.sh -s "nas;/mnt/nas;yes;no;yes;all" -s "media;/mnt/media;yes;no;yes;all" -s "setup;/mnt/setup;yes;no;yes;all"
     restart: always
   transmission:
     image: linuxserver/transmission
@@ -66,3 +66,12 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/roman/setup/portainer:/data
+    homeassistant:
+      container_name: home-assistant
+      image: homeassistant/home-assistant:stable
+      volumes:
+        - /home/roman/setup/homeassistant:/config
+      environment:
+        - TZ=Europe/Moscow
+      restart: always
+      network_mode: host
