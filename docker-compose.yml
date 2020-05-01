@@ -67,11 +67,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/roman/setup/portainer:/data
   homeassistant:
-    container_name: home-assistant
-    image: homeassistant/home-assistant:stable
-    volumes:
-      - /home/roman/setup/homeassistant:/config
-    environment:
-      - TZ=Europe/Moscow
-    restart: always
-    network_mode: host
+      container_name: home-assistant
+      image: homeassistant/home-assistant:stable
+      volumes:
+        - /home/roman/setup/homeassistant:/config
+      environment:
+        - TZ=Europe/Moscow
+      restart: always
+      network_mode:
