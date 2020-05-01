@@ -74,8 +74,4 @@ services:
     environment:
       - TZ=Europe/Moscow
     restart: always
-<<<<<<< HEAD
     network_mode: host
-=======
-    network_mode:
->>>>>>> d1e16aba6a78d7c45ba2ba7cffbc406ee8c56065
