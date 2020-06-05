@@ -73,3 +73,16 @@ services:
     ports:
       - 1883:1883
     user: '1000:1000'
+  zigbee2mqtt:
+      container_name: zigbee2mqtt
+      image: koenkk/zigbee2mqtt
+      volumes:
+        - /home/roman/setup/zigbee2mqtt/data:/app/data
+        - /run/udev:/run/udev:ro
+      devices:
+        - /dev/ttyACM0:/dev/ttyACM0
+      restart: always
+      network_mode: host
+      privileged: true
+      environment:
+        - TZ=Europe/Moscow
