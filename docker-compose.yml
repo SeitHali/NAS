@@ -62,3 +62,14 @@ services:
       - TZ=Europe/Moscow
     restart: always
     network_mode: host
+  eclipse-mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: always
+    volumes:
+      - /home/roman/setup/mosquitto/config:/mosquitto/config
+      - /home/roman/setup/mosquitto/data:/mosquitto/data
+      - /home/roman/setup/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+    user: '1000:1000'
