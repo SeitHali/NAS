@@ -1,24 +1,5 @@
 version: '3'
 services:
-  transmission:
-    image: linuxserver/transmission
-    container_name: transmission
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      - USER=transmission #optional
-      - PASS=4f92c19d05 #optional
-    volumes:
-      - /home/roman/setup/transmission/config:/config
-      - /home/roman/media/TORRENT:/downloads
-      - /home/roman/setup/transmission/watch:/watch
-    ports:
-      - 9091:9091
-      - 51413:51413
-      - 51413:51413/udp
-    restart: unless-stopped
   plex:
     image: linuxserver/plex
     container_name: plex
@@ -42,47 +23,4 @@ services:
       - 5353:5353/udp
       - 1900:1900/udp
     restart: unless-stopped
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    restart: always
-    ports:
-      - 9000:9000
-      - 8000:8000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /home/roman/setup/portainer:/data
-  homeassistant:
-    container_name: home-assistant
-    image: homeassistant/home-assistant:stable
-    volumes:
-      - /home/roman/setup/homeassistant:/config
-    environment:
-      - TZ=Europe/Moscow
-    restart: always
-    network_mode: host
-  eclipse-mosquitto:
-    container_name: mosquitto
-    image: eclipse-mosquitto:latest
-    restart: always
-    volumes:
-      - /home/roman/setup/mosquitto/config:/mosquitto/config
-      - /home/roman/setup/mosquitto/data:/mosquitto/data
-      - /home/roman/setup/mosquitto/log:/mosquitto/log
-    ports:
-      - 1883:1883
-    user: '1000:1000'
-  zigbee2mqtt:
-      container_name: zigbee2mqtt
-      image: koenkk/zigbee2mqtt
-      volumes:
-        - /home/roman/setup/zigbee2mqtt/data:/app/data
-        - /run/udev:/run/udev:ro
-      devices:
-        - /dev/ttyACM0:/dev/ttyACM0
-      restart: always
-      network_mode: host
-      privileged: true
-      environment:
-        - TZ=Europe/Moscow
+  
