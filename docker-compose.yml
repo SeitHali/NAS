@@ -1,10 +1,9 @@
 version: '3'
 services:
   traefik:
-      image: "traefik:v2.3"
+      image: "traefik:latest"
       container_name: "traefik"
       command:
-        #- "--log.level=DEBUG"
         - "--api.insecure=true"
         - "--providers.docker=true"
         - "--providers.docker.exposedbydefault=false"
@@ -21,4 +20,9 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
         - "traefik.http.routers.whoami.entrypoints=web"
-  
+networks:
+  t1_proxy:
+    external:
+      name: t1_proxy
+  default:
+    driver: bridge
