@@ -168,7 +168,7 @@ services:
   # Plex - Media Server
   plexms:
     image: plexinc/pms-docker:public
-    container_name: plexms
+    container_name: plex
     restart: unless-stopped
     networks:
       - t2_proxy
@@ -216,12 +216,14 @@ services:
   organizr:
     container_name: organizr
     restart: always
-    image: lsiocommunity/organizr
+    image: organizr/organizr
     volumes:
       - $DOCKERDIR/organizr:/config
-    ports:
-      - "8113:80"
+    #ports:
+    #  - "8113:80"
     environment:
+      - fpm=true
+      - branch=v2-master #v2-master or #v2-develop
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
@@ -231,10 +233,10 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.organizr-rtr.entrypoints=https"
-      - "traefik.http.routers.organizr-rtr.rule=Host(`organizr.$DOMAINNAME`)"
+      - "traefik.http.routers.organizr-rtr.rule=Host(`$DOMAINNAME`,`organizr.$DOMAINNAME`)"
       - "traefik.http.routers.organizr-rtr.tls=true"
       ## Middlewares     
       - "traefik.http.routers.organizr-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.routers.organizr-rtr.service=organizr-svc"
-      - "traefik.http.services.organizr-svc.loadbalancer.server.port=8113"
+      - "traefik.http.services.organizr-svc.loadbalancer.server.port=80"
