@@ -213,3 +213,28 @@ services:
       #- "traefik.http.routers.plexms-rtr.service=plexms-svc"
       #- "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
       - "traefik.http.services.plex.loadbalancer.server.port=32400"
+  organizr:
+    container_name: organizr
+    restart: always
+    image: lsiocommunity/organizr
+    volumes:
+      - $DOCKERDIR/organizr:/config
+    ports:
+      - "8113:80"
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    networks:
+      - t2_proxy
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.organizr-rtr.entrypoints=https"
+      - "traefik.http.routers.organizr-rtr.rule=Host(`$DOMAINNAME`)"
+      - "traefik.http.routers.organizr-rtr.tls=true"
+      ## Middlewares     
+      - "traefik.http.routers.organizr-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.routers.organizr-rtr.service=organizr-svc"
+      - "traefik.http.services.organizr-svc.loadbalancer.server.port=8113"
