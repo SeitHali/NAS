@@ -269,3 +269,30 @@ services:
       - "traefik.http.routers.heimdall-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.services.heimdall-svc.loadbalancer.server.port=80" 
+
+  #Transmission
+  transmission:
+    image: ghcr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+    volumes:
+      - $DOCKERDIR/transmission/config:/config
+      - /home/roman/media/TORRENT:/downloads
+      - $DOCKERDIR/transmission/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.heimdall-rtr.entrypoints=https"
+      - "traefik.http.routers.heimdall-rtr.rule=Host(`torrent.$DOMAINNAME`)"
+      - "traefik.http.routers.heimdall-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.heimdall-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
