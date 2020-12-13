@@ -213,6 +213,7 @@ services:
       #- "traefik.http.routers.plexms-rtr.service=plexms-svc"
       #- "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
       - "traefik.http.services.plex.loadbalancer.server.port=32400"
+  
   organizr:
     container_name: organizr
     restart: always
@@ -240,3 +241,28 @@ services:
       ## HTTP Services
       - "traefik.http.routers.organizr-rtr.service=organizr-svc"
       - "traefik.http.services.organizr-svc.loadbalancer.server.port=80"
+  heimdall:
+    image: ghcr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=$PUID
+      - PGID=$GUID
+      - TZ=$TZ
+    networks:
+      - t2_proxy
+    volumes:
+      - $DOCKERDIR/heimdall:/config
+    #ports:
+    #  - 80:80
+    #  - 443:443
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.heimdall-rtr.entrypoints=https"
+      - "traefik.http.routers.heimdall-rtr.rule=Host(`$DOMAINNAME`,`heimdal.$DOMAINNAME`)"
+      - "traefik.http.routers.heimdall-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.heimdall-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.services.heimdall-svc.loadbalancer.server.port=80" 
