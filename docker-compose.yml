@@ -233,7 +233,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.organizr-rtr.entrypoints=https"
-      - "traefik.http.routers.organizr-rtr.rule=Host(`$DOMAINNAME`,`organizr.$DOMAINNAME`)"
+      - "traefik.http.routers.organizr-rtr.rule=Host(`organizr.$DOMAINNAME`)"
       - "traefik.http.routers.organizr-rtr.tls=true"
       ## Middlewares     
       - "traefik.http.routers.organizr-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
