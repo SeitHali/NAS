@@ -288,11 +288,15 @@ services:
       - 51413:51413
       - 51413:51413/udp
     restart: unless-stopped
+    networks:
+      - t2_proxy
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.heimdall-rtr.entrypoints=https"
-      - "traefik.http.routers.heimdall-rtr.rule=Host(`torrent.$DOMAINNAME`)"
-      - "traefik.http.routers.heimdall-rtr.tls=true"
+      - "traefik.http.routers.transmission-rtr.entrypoints=https"
+      - "traefik.http.routers.transmission-rtr.rule=Host(`torrent.$DOMAINNAME`)"
+      - "traefik.http.routers.transmission-rtr.tls=true"
       ## Middlewares
-      - "traefik.http.routers.heimdall-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      - "traefik.http.routers.transmission-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.services.transmission-svc.loadbalancer.server.port=9091"
