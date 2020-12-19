@@ -326,3 +326,25 @@ services:
       #- "traefik.http.routers.transmission-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.services.ha-svc.loadbalancer.server.port=8123"
+mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    networks:
+      - t2_proxy
+    restart: always
+    expose:
+      - 1883
+      - 9001
+    volumes:
+      - $DOCKERDIR/mosquitto:/mosquitto/"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=mqtt"
+      - "traefik.tcp.services.mqtt.loadbalancer.server.port=1883"
+      - "traefik.tcp.services.mqtt_websocket.loadbalancer.server.port=9001"
+      - "traefik.tcp.routers.tcpr_mqtt.entrypoints=mqtt"
+      - "traefik.tcp.routers.tcpr_mqtt.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.tcpr_mqtt.service=mqtt"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.entrypoints=websocket"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.tcpr_mqtt_websocket.service=mqtt_websocket"
