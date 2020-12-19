@@ -326,7 +326,7 @@ services:
       #- "traefik.http.routers.transmission-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.services.ha-svc.loadbalancer.server.port=8123"
-mqtt:
+  mqtt:
     container_name: mqtt
     image: eclipse-mosquitto
     networks:
