@@ -336,6 +336,7 @@ services:
       #- "traefik.http.routers.transmission-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.services.ha-svc.loadbalancer.server.port=8123"
+  #MQTT
   mqtt:
     container_name: mqtt
     image: eclipse-mosquitto
@@ -346,3 +347,17 @@ services:
       - 9001
     volumes:
       - $DOCKERDIR/mosquitto:/mosquitto/"
+  #Zigbee2mqtt
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    volumes:
+      - /home/roman/setup/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    restart: always
+    network_mode: host
+    privileged: true
+    environment:
+      - TZ=Europe/Moscow
