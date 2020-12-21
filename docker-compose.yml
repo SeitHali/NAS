@@ -317,8 +317,7 @@ services:
     image: homeassistant/home-assistant
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
-    networks:
-      - t2_proxy
+    network_mode: host
     volumes:
       - $DOCKERDIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
