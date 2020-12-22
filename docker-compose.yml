@@ -314,7 +314,7 @@ services:
       - "traefik.http.services.transmission-svc.loadbalancer.server.port=9091"
   #HomeAssistant
   homeassistant:
-    container_name: homeassistant
+    container_name: ha
     restart: always
     image: homeassistant/home-assistant
     devices:
