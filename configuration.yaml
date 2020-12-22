@@ -1,0 +1,47 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+#xiaomi_aqara:
+#  discovery_retry: 5
+#  gateways:
+#    - key: o82c4dbs3c48bzhp
+#yeelight:
+#  devices:
+#    192.168.0.47:
+#      name: Living Room
+#      transition: 1000
+#      use_music_mode: true
+#      save_on_change: true
+mqtt:
+  broker: 192.168.0.100
+  port: 1883
+  username: mqtt
+  password: 7985dc91f1
+  discovery: true
+  discovery_prefix: homeassistant
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
+#fan:
+#  - platform: xiaomi_miio_fan
+#    name: Xiaomi Smart Fan
+#    host: 192.168.0.96
+#    token: 302f368f9120581634f069e8845711be
+#    model: zhimi.fan.sa1
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+xiaomi_gateway3:
+  debug: bluetooth 
