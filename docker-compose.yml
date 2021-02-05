@@ -317,8 +317,8 @@ services:
     container_name: ha
     restart: always
     image: homeassistant/home-assistant
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+    #devices:
+    #  - /dev/ttyACM0:/dev/ttyACM0
     network_mode: host
     volumes:
       - $DOCKERDIR/homeassistant:/config
@@ -359,8 +359,8 @@ services:
     volumes:
       - /home/roman/setup/zigbee2mqtt/data:/app/data
       - /run/udev:/run/udev:ro
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+    #devices:
+    #  - /dev/ttyACM0:/dev/ttyACM0
     restart: always
     network_mode: host
     privileged: true
