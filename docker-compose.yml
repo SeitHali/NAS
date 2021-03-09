@@ -157,7 +157,7 @@ services:
       - "traefik.http.routers.portainer-rtr.tls=true"
       ## Middlewares
       - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
-      ## HTTP Services
+      ## HTTP Servicesa
       - "traefik.http.routers.portainer-rtr.service=portainer-svc"
       - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
 
@@ -220,3 +220,28 @@ services:
       ## HTTP Services
       - "traefik.http.services.calibre-gui-svc.loadbalancer.server.port=8080"
       - "traefik.http.services.calibre-nas-svc.loadbalancer.server.port=8081"
+
+  plex:
+    image: ghcr.io/linuxserver/plex
+    container_name: plex
+    ports:
+      - 32469:32469
+      - 32400:32400
+      - 32401:32401
+      - 3005:3005
+      - 8324:8324
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - VERSION=docker
+    volumes:
+      - $DOCKERDIR/plex/config:/config
+      - $DOCKERDIR/plex/transcode:/transcode
+      - /home/roman/media/SERIALS:/tv
+      - /home/roman/media/MOVIES:/movies
+    restart: unless-stopped
