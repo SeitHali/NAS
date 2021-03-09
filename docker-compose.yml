@@ -190,3 +190,33 @@ services:
       - "traefik.http.routers.transmission-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
       ## HTTP Services
       - "traefik.http.services.transmission-svc.loadbalancer.server.port=9091"
+  
+  calibre:
+    image: ghcr.io/linuxserver/calibre
+    container_name: calibre
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/calibre:/config
+    networks:
+      - t2_proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-gui-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-gui-rtr.rule=Host(`calibre.$DOMAINNAME`)"
+      - "traefik.http.routers.calibre-gui-rtr.tls=true"
+      - "traefik.http.routers.calibre-gui-rtr.service=calibre-gui-svc"
+      - "traefik.http.routers.calibre-nas-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-nas-rtr.rule=Host(`calibrenas.$DOMAINNAME`)"
+      - "traefik.http.routers.calibre-nas-rtr.tls=true"
+      - "traefik.http.routers.calibre-nas-rtr.service=calibre-nas-svc"
+      ## Middlewares
+      - "traefik.http.routers.calibre-gui-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.calibre-nas-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.services.calibre-gui-svc.loadbalancer.server.port=8080"
+      - "traefik.http.services.calibre-nas-svc.loadbalancer.server.port=8081"
