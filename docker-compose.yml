@@ -256,7 +256,7 @@ services:
       - 'postgres'
     network_mode: host
     volumes:
-      - $DOCKERDIR/homeAssistant:/config
+      - $DOCKERDIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=$PUID
