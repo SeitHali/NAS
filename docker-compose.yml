@@ -253,7 +253,7 @@ services:
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
     depends_on:
-      - 'mariadb'
+      - 'postgres'
     network_mode: host
     volumes:
       - $DOCKERDIR/homeAssistant:/config
@@ -271,47 +271,71 @@ services:
       ## HTTP Services
       - "traefik.http.services.ha-svc.loadbalancer.server.port=8123"
 
-  mariadb:
-    container_name: mariadb
-    image: mariadb
+  postgres:
+    image: postgres
     restart: always
-    volumes:
-      - $DOCKERDIR/mariadb/config:/etc/mysql/conf.d
-      - $DOCKERDIR/mariadb/data:/var/lib/mysql
+    container_name: postgres
+    networks:
+      - t2_proxy
+    ports:
+      - '5432:5432'
     environment:
-      TZ: $TZ
-      MYSQL_USER: $MYSQL_USER
-      MYSQL_PASSWORD: $MYSQL_PASSWORD
-      MYSQL_DATABASE: $MYSQL_DATABASE
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - $DOCKERDIR/postgres:/docker-entrypoint-initdb.d
 
   sqlpad:
-    image: sqlpad/sqlpad:latest
+    image: sqlpad/sqlpad:5
     hostname: 'sqlpad'
     container_name: sqlpad
+    restart: always
     depends_on:
-      - 'mariadb'
-    ports:
-      - '3000:3000'
+      - 'postgres'
+    networks:
+      - t2_proxy
     environment:
       SQLPAD_ADMIN: $SQLPAD_ADMIN
       SQLPAD_ADMIN_PASSWORD: $SQLPAD_ADMIN_PASSWORD
       SQLPAD_APP_LOG_LEVEL: debug
       SQLPAD_WEB_LOG_LEVEL: warn
       SQLPAD_SEED_DATA_PATH: /etc/sqlpad/seed-data
-      SQLPAD_BACKEND_DB_URI: mariadb://root:$MYSQL_ROOT_PASSWORD@mariadb:3306/db?timezone=$TZ
-      SQLPAD_SESSION_STORE: 'database'
-      SQLPAD_DB_PATH: '/var/lib/sqlpad'
-      SQLPAD_DB_IN_MEMORY: 'false'
-      SQLPAD_QUERY_RESULT_STORE: 'database'
-      # This adds a pre-configured connection to point to the database
-      # used as the backend for SQLPad itself
-      SQLPAD_CONNECTIONS__mariad__name: 'MariaDB'
-      SQLPAD_CONNECTIONS__mariad__driver: mysql
-      SQLPAD_CONNECTIONS__mariad__host: mariadb
-      SQLPAD_CONNECTIONS__mariad__port: 3306
-      SQLPAD_CONNECTIONS__mariad__database: $MYSQL_DATABASE
-      SQLPAD_CONNECTIONS__mariad__username: root
-      SQLPAD_CONNECTIONS__mariad__password: $MYSQL_ROOT_PASSWORD
+      SQLPAD_CONNECTIONS__pgdemo__name: Postgres
+      SQLPAD_CONNECTIONS__pgdemo__driver: postgres
+      SQLPAD_CONNECTIONS__pgdemo__host: postgres
+      SQLPAD_CONNECTIONS__pgdemo__database: sqlpad
+      SQLPAD_CONNECTIONS__pgdemo__username: $POSTGRES_USER
+      SQLPAD_CONNECTIONS__pgdemo__password: $POSTGRES_PASSWORD
+      SQLPAD_CONNECTIONS__pgdemo__multiStatementTransactionEnabled: 'true'
+      SQLPAD_CONNECTIONS__pgdemo__idleTimeoutSeconds: 86400
     volumes:
       - $DOCKERDIR/sqlpad:/etc/sqlpad/seed-data
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.sqlpad-rtr.entrypoints=https"
+      - "traefik.http.routers.sqlpad-rtr.rule=Host(`sqlpad.$DOMAINNAME`)"
+      - "traefik.http.routers.sqlpad-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.sqlpad-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.services.sqlpad-svc.loadbalancer.server.port=3000"  
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    depends_on:
+      - 'postgres'
+    networks:
+      - t2_proxy
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
+      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.$DOMAINNAME`)"
+      - "traefik.http.routers.phpmyadmin-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=8080"  
