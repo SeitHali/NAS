@@ -245,3 +245,37 @@ services:
       - /home/roman/media/SERIALS:/tv
       - /home/roman/media/MOVIES:/movies
     restart: unless-stopped
+
+  homeassistant:
+    container_name: homeassistant
+    restart: always
+    image: homeassistant/home-assistant
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    network_mode: host
+    volumes:
+      - $DOCKERDIR/homeAssistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.ha-rtr.entrypoints=https"
+      - "traefik.http.routers.ha-rtr.rule=Host(`ha.$DOMAINNAME`)"
+      - "traefik.http.routers.ha-rtr.tls=true"
+      ## HTTP Services
+      - "traefik.http.services.ha-svc.loadbalancer.server.port=8123"
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    volumes:
+      - $DOCKERDIR/mariadb/config:/etc/mysql/conf.d
+      - $DOCKERDIR/mariadb/data:/var/lib/mysql
+    environment:
+      TZ: $TZ
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
