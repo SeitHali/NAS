@@ -252,6 +252,8 @@ services:
     image: homeassistant/home-assistant
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
+    depends_on:
+      - 'mariadb'
     network_mode: host
     volumes:
       - $DOCKERDIR/homeAssistant:/config
@@ -278,4 +280,38 @@ services:
       - $DOCKERDIR/mariadb/data:/var/lib/mysql
     environment:
       TZ: $TZ
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+
+  sqlpad:
+    image: sqlpad/sqlpad:latest
+    hostname: 'sqlpad'
+    container_name: sqlpad
+    depends_on:
+      - 'mariadb'
+    ports:
+      - '3000:3000'
+    environment:
+      SQLPAD_ADMIN: $SQLPAD_ADMIN
+      SQLPAD_ADMIN_PASSWORD: $SQLPAD_ADMIN_PASSWORD
+      SQLPAD_APP_LOG_LEVEL: debug
+      SQLPAD_WEB_LOG_LEVEL: warn
+      SQLPAD_SEED_DATA_PATH: /etc/sqlpad/seed-data
+      SQLPAD_BACKEND_DB_URI: mariadb://root:$MYSQL_ROOT_PASSWORD@mariadb:3306/db?timezone=$TZ
+      SQLPAD_SESSION_STORE: 'database'
+      SQLPAD_DB_PATH: '/var/lib/sqlpad'
+      SQLPAD_DB_IN_MEMORY: 'false'
+      SQLPAD_QUERY_RESULT_STORE: 'database'
+      # This adds a pre-configured connection to point to the database
+      # used as the backend for SQLPad itself
+      SQLPAD_CONNECTIONS__mariad__name: 'MariaDB'
+      SQLPAD_CONNECTIONS__mariad__driver: mysql
+      SQLPAD_CONNECTIONS__mariad__host: mariadb
+      SQLPAD_CONNECTIONS__mariad__port: 3306
+      SQLPAD_CONNECTIONS__mariad__database: $MYSQL_DATABASE
+      SQLPAD_CONNECTIONS__mariad__username: root
+      SQLPAD_CONNECTIONS__mariad__password: $MYSQL_ROOT_PASSWORD
+    volumes:
+      - $DOCKERDIR/sqlpad:/etc/sqlpad/seed-data
