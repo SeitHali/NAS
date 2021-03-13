@@ -247,7 +247,7 @@ services:
     restart: unless-stopped
 
   homeassistant:
-    container_name: homeassistant
+    container_name: ha
     restart: always
     image: homeassistant/home-assistant
     devices:
