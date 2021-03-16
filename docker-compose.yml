@@ -378,7 +378,63 @@ services:
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    
+
+  torproxy:
+    restart: always
+    image: dperson/torproxy:latest
+    container_name: torproxy
+    ports:
+      - 8118:8118
+      - 9050:9050
+
+  jackett:
+    image: ghcr.io/linuxserver/jackett
+    container_name: jackett
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/jacket:/config
+      - /home/roman/media/TORRENT/completed:/downloads
+    ports:
+      - 9117:9117
+    networks:
+      - t2_proxy
+    restart: unless-stopped
+
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/sonarr:/config
+      - /home/roman/media/SERIALS:/tv
+      - /home/roman/media/TORRENT/completed:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/radarr:/config
+      - /home/roman/media/movies:/movies
+      - /home/roman/media/TORRENT/completed:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+
+  
