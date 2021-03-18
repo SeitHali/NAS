@@ -399,7 +399,7 @@ services:
       - TZ=$TZ
     volumes:
       - $DOCKERDIR/jacket:/config
-      - /home/roman/media/TORRENT/completed:/downloads
+      - /home/roman/media/TORRENT/complete:/downloads
     ports:
       - 9117:9117
     networks:
@@ -416,7 +416,7 @@ services:
     volumes:
       - $DOCKERDIR/sonarr:/config
       - /home/roman/media/SERIALS:/tv
-      - /home/roman/media/TORRENT/completed:/downloads
+      - /home/roman/media/TORRENT/complete:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -430,8 +430,8 @@ services:
       - TZ=$TZ
     volumes:
       - $DOCKERDIR/radarr:/config
-      - /home/roman/media/movies:/movies
-      - /home/roman/media/TORRENT/completed:/downloads
+      - /home/roman/media/MOVIES:/movies
+      - /home/roman/media/TORRENT/complete:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
