@@ -474,4 +474,14 @@ services:
       - "traefik.http.routers.organizr-rtr.service=organizr-svc"
       - "traefik.http.services.organizr-svc.loadbalancer.server.port=80"
 
-  
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    network_mode: host
+    restart: always
+    expose:
+      - 1883
+      - 9001
+    volumes:
+      - $DOCKERDIR/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - $DOCKERDIR/mosquitto/data:/mosquitto/data
