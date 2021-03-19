@@ -485,3 +485,17 @@ services:
     volumes:
       - $DOCKERDIR/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - $DOCKERDIR/mosquitto/data:/mosquitto/data
+  
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    volumes:
+      - $DOCKERDIR/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    restart: always
+    network_mode: host
+    privileged: true
+    environment:
+      - TZ=$TZ
