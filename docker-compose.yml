@@ -436,5 +436,19 @@ services:
       - 7878:7878
     restart: unless-stopped
 
+  nzbget:
+    image: ghcr.io/linuxserver/nzbget
+    container_name: nzbget
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/nzbget:/config
+      - /home/roman/media/TORRENT/complete:/downloads
+    ports:
+      - 6789:6789
+    restart: unless-stopped
+
 
   
