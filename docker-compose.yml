@@ -469,7 +469,7 @@ services:
       - "traefik.http.routers.organizr-rtr.rule=Host(`organizr.$DOMAINNAME`)"
       - "traefik.http.routers.organizr-rtr.tls=true"
       ## Middlewares
-      #- "traefik.http.routers.organizr-rtr.middlewares=chain-no-auth@file" 
+      - "traefik.http.routers.organizr-rtr.middlewares=chain-no-auth@file" 
       ## HTTP Services
       - "traefik.http.routers.organizr-rtr.service=organizr-svc"
       - "traefik.http.services.organizr-svc.loadbalancer.server.port=80"
