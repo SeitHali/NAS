@@ -251,7 +251,7 @@ services:
     restart: always
     image: homeassistant/home-assistant
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyUSB0:/dev/ttyUSB0
     depends_on:
       - 'postgres'
     network_mode: host
@@ -483,19 +483,56 @@ services:
       - 1883
       - 9001
     volumes:
-      - $DOCKERDIR/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - $DOCKERDIR/mosquitto/config:/mosquitto/config
       - $DOCKERDIR/mosquitto/data:/mosquitto/data
+      - $DOCKERDIR/mosquitto/log:/mosquitto/log
   
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
+    image: koenkk/zigbee2mqtt:latest
     volumes:
       - $DOCKERDIR/zigbee2mqtt/data:/app/data
       - /run/udev:/run/udev:ro
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyUSB0:/dev/ttyUSB0
     restart: always
     network_mode: host
     privileged: true
     environment:
       - TZ=$TZ
+
+  kodi:
+    image: linuxserver/kodi-headless
+    ports:
+      - "8087:8080"
+      - "9777:9777"
+      - "9090:9090"
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKERDIR/kodi:/config/.kodi
+
+  blynk:
+    image: mpherg/blynk-server
+    container_name: blynk
+    ports:
+       - "8441:8441"
+       - "9443:8080"
+    volumes:
+      - $DOCKERDIR/blynk/data:/data
+    #networks:
+    #  - t2_proxy
+    #labels:
+    #  - "traefik.enable=true"
+      ## HTTP Routers
+    #  - "traefik.http.routers.blynk-rtr.entrypoints=https"
+    #  - "traefik.http.routers.blynk-rtr.rule=Host(`blynk.$DOMAINNAME`)"
+    #  - "traefik.http.routers.blynk-rtr.tls=true"
+      ## Middlewares
+    #  - "traefik.http.routers.blynk-rtr.middlewares=chain-no-auth@file" 
+      ## HTTP Services
+    #  - "traefik.http.routers.blynk-rtr.service=blynk-svc"
+    #  - "traefik.http.services.blynk-svc.loadbalancer.server.port=9443"
+    
