@@ -1,0 +1,47 @@
+homeassistant: true
+permit_join: true
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://192.168.0.100
+  user: mqtt
+  password: uvsmsyitv57yigno
+serial:
+  port: /dev/ttyUSB0
+  adapter: null
+devices:
+  '0x00158d000426471c':
+    friendly_name: Cabinet_wired_switch
+  '0x00158d0006baa466':
+    friendly_name: Cabinet_wireless_button_1
+  '0x00158d0006d3e50d':
+    friendly_name: Cabinet_wireless_button_2
+  '0x00158d000283d11f':
+    friendly_name: Cabinet_wireless_switch
+  '0x00158d00042626c3':
+    friendly_name: Bedroom_wired_switch
+  '0x00158d0006baa473':
+    friendly_name: Bedroom_wireless_button_1
+  '0x00158d0006ba6fe7':
+    friendly_name: Bedroom_wireless_button_2
+  '0x04cf8cdf3c7d7102':
+    friendly_name: Bedroom_wireless_control_1
+  '0x00158d000425e158':
+    friendly_name: Lobby_wired_switch
+  '0x00158d0006d513d0':
+    friendly_name: Lobby_wireless_button_1
+  '0x00158d0006ba1dae':
+    friendly_name: Lobby_wireless_button_2
+  '0x00158d0004082177':
+    friendly_name: Wardrobe_wired_switch
+  '0x00158d000353c38d':
+    friendly_name: '0x00158d000353c38d'
+  '0x00158d0003c7f76a':
+    friendly_name: '0x00158d0003c7f76a'
+  '0x00158d0004170563':
+    friendly_name: '0x00158d0004170563'
+  '0x00158d000420b605':
+    friendly_name: Wardrobe_door_sensor'
+  '0x00158d00041d6a36':
+    friendly_name: '0x00158d00041d6a36'
+  '0x00158d00034333ec':
+    friendly_name: '0x00158d00034333ec'
