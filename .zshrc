@@ -111,3 +111,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 alias nas="ssh roman@192.168.0.100 -p 8822"
+alias tls="tmux ls"
+alias ta="tmux a -t"
+alias tn="tmux new -s"
